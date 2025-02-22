@@ -1,5 +1,5 @@
 export async function GET(request) {
-    const url = request.nextUrl;
+    const url = new URL(request.url);;
     const pathname = url.pathname;
     const searchParams = url.searchParams;
 
