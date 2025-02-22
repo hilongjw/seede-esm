@@ -19,7 +19,10 @@ export async function GET(request) {
 
     return new Response(text, {
         headers: {
-            'content-type': contentType
+            'content-type': contentType,
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
         }
     });
 }
