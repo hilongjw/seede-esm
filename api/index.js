@@ -3,6 +3,16 @@ export async function GET(request) {
     const pathname = url.pathname;
     const searchParams = url.searchParams;
 
+    // Handle favicon.ico request with an empty response
+    if (pathname === '/api/favicon.ico') {
+        return new Response('', {
+            status: 204, // No Content
+            headers: {
+                'Cache-Control': 'public, max-age=86400', // Cache for 1 day
+            }
+        });
+    }
+
     // Remove /api prefix and keep query parameters
     const targetPath = pathname.replace(/^\/api/, '');
 
