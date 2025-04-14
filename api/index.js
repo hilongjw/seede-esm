@@ -17,12 +17,26 @@ export async function GET(request) {
     const contentType = response.headers.get('content-type');
     const text = await response.text();
 
+    // Calculate cache duration based on content type
+    let cacheDuration = 60 * 60 * 24; // Default: 1 day in seconds
+    if (contentType && (
+        contentType.includes('javascript') ||
+        contentType.includes('application/json') ||
+        contentType.includes('text/css')
+    )) {
+        cacheDuration = 60 * 60 * 24 * 7; // 7 days for static assets
+    }
+
     return new Response(text, {
         headers: {
             'content-type': contentType,
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Cache-Control': `public, max-age=${cacheDuration}, s-maxage=${cacheDuration}, stale-while-revalidate=${cacheDuration * 2}`,
+            'CDN-Cache-Control': `public, max-age=${cacheDuration}`,
+            'Vercel-CDN-Cache-Control': `public, max-age=${cacheDuration}`,
+            'Surrogate-Control': `public, max-age=${cacheDuration}`
         }
     });
 }
